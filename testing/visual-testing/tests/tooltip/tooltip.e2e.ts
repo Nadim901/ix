@@ -20,10 +20,6 @@ regressionTest.describe('tooltip', () => {
 
     await tooltipTriggerHandler.hover();
     await page.waitForTimeout(500);
-    page.setViewportSize({
-      height: 200,
-      width: 400,
-    });
 
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot({
       maxDiffPixelRatio: 0.01,
@@ -39,10 +35,6 @@ regressionTest.describe('tooltip', () => {
 
     await tooltipTriggerHandler.hover();
     await page.waitForTimeout(500);
-    page.setViewportSize({
-      height: 200,
-      width: 400,
-    });
 
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot({
       maxDiffPixelRatio: 0.01,
@@ -59,11 +51,6 @@ regressionTest.describe('tooltip', () => {
     await tooltipTriggerHandler.hover();
     await page.waitForTimeout(500);
 
-    page.setViewportSize({
-      height: 200,
-      width: 600,
-    });
-
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot({
       maxDiffPixelRatio: 0.01,
     });
@@ -78,10 +65,6 @@ regressionTest.describe('tooltip', () => {
 
     await tooltipTriggerHandler.hover();
     await page.waitForTimeout(500);
-    page.setViewportSize({
-      height: 200,
-      width: 600,
-    });
 
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot({
       maxDiffPixelRatio: 0.01,
@@ -185,10 +168,6 @@ regressionTest.describe('tooltip', () => {
     const trigger = await page.waitForSelector('#trigger');
     await trigger.hover();
     await page.waitForTimeout(500);
-    page.setViewportSize({
-      height: 250,
-      width: 600,
-    });
 
     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot();
   });
