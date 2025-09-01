@@ -75,7 +75,11 @@ export class DateInput implements IxInputFieldComponent<string | undefined> {
    */
   @Prop({ reflect: true, mutable: true }) value?: string = '';
 
-  @Watch('value') watchValuePropHandler(newValue: string) {
+  @Watch('value') watchValuePropHandler(newValue: string | undefined) {
+    if (newValue === null || newValue === undefined) {
+      this.touched = false;
+    }
+
     this.onInput(newValue);
   }
 
@@ -295,6 +299,7 @@ export class DateInput implements IxInputFieldComponent<string | undefined> {
   async onInput(value: string | undefined) {
     this.value = value;
     if (!value) {
+      this.isInputInvalid = this.required === true && this.touched;
       this.valueChange.emit(value);
       return;
     }
