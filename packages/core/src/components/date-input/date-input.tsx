@@ -242,6 +242,27 @@ export class DateInput implements IxInputFieldComponent<string | undefined> {
     this.value = value;
   }
 
+  private updateFormValidity(): void {
+    if (!this.formInternals) return;
+
+    const valueMissing = this.required && !this.value;
+    const patternMismatch = this.isInputInvalid;
+
+    if (valueMissing || this.isInputInvalid) {
+      const inputElement = this.inputElementRef.current;
+      this.formInternals.setValidity(
+        {
+          valueMissing,
+          patternMismatch,
+        },
+        ' ',
+        inputElement || undefined
+      );
+    } else {
+      this.formInternals.setValidity({});
+    }
+  }
+
   connectedCallback(): void {
     this.classObserver = createClassMutationObserver(this.hostElement, () =>
       this.checkClassList()
@@ -264,6 +285,10 @@ export class DateInput implements IxInputFieldComponent<string | undefined> {
 
     this.checkClassList();
     this.updateFormInternalValue(this.value);
+  }
+
+  componentDidLoad(): void {
+    this.updateFormValidity();
   }
 
   private updatePaddings() {
@@ -301,6 +326,7 @@ export class DateInput implements IxInputFieldComponent<string | undefined> {
     if (!value) {
       this.isInputInvalid = this.required === true && this.touched;
       this.valueChange.emit(value);
+      this.updateFormValidity();
       return;
     }
 
@@ -323,6 +349,7 @@ export class DateInput implements IxInputFieldComponent<string | undefined> {
     }
 
     this.valueChange.emit(value);
+    this.updateFormValidity();
   }
 
   onCalenderClick(event: Event) {
@@ -378,7 +405,14 @@ export class DateInput implements IxInputFieldComponent<string | undefined> {
             }
           }}
           onFocus={async () => {
-            this.openDropdown();
+            setTimeout(() => {
+              if (document.activeElement === this.inputElementRef.current) {
+                this.openDropdown();
+              } else {
+                this.ixBlur.emit();
+                this.touched = true;
+              }
+            }, 50);
             this.ixFocus.emit();
           }}
           onBlur={() => {
